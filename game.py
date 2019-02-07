@@ -1,10 +1,13 @@
 import tkinter
+import random
 
-# constans
-ZERRO = 0
+
+# constants
+ZERO = 0
 WIDTH = 640
 HEIGHT = 480
 BG_COLOR = 'white'
+COLORS = ['aqua', 'yellow', 'red', 'green', 'orange', 'gold', 'silver']
 MAIN_BALL_RADIUS = 30
 MAIN_BALL_COLOR = 'blue'
 INIT_DX = 3
@@ -24,7 +27,7 @@ class Balls:
 
     def draw(self):
         canvas.create_oval(self.x - self.r, self.y - self.r, self.x + self.r, self.y + self.r,
-                           fill=self.color)
+                           fill=self.color, outline=self.color)
 
     def hide(self):
         canvas.create_oval(self.x - self.r, self.y - self.r, self.x + self.r, self.y + self.r,
@@ -32,9 +35,9 @@ class Balls:
 
     def move(self):
         # colliding with walls
-        if (self.x + self.r + self.dx >= WIDTH) or (self.x - self.r + self.dx <= ZERRO):
+        if (self.x + self.r + self.dx >= WIDTH) or (self.x - self.r + self.dx <= ZERO):
             self.dx = -self.dx
-        if (self.y + self.r + self.dy >= HEIGHT) or (self.y - self.r + self.dy <= ZERRO):
+        if (self.y + self.r + self.dy >= HEIGHT) or (self.y - self.r + self.dy <= ZERO):
             self.dy = -self.dy
         self.hide()
         self.x += self.dx
@@ -70,6 +73,19 @@ def mouse_click(event):
         main_ball.hide()
 
 
+# create list of balls
+def create_list_of_balls(count):
+    list = []
+    while len(list) < count:
+        next_ball = Balls(random.choice(range(0, WIDTH)),
+                          random.choice(range(0, HEIGHT)),
+                          random.choice(range(15, 35)),
+                          random.choice(COLORS))
+        list.append(next_ball)
+        next_ball.draw()
+    return list
+
+
 # main loop game
 def main():
     if 'main_ball' in globals():
@@ -89,5 +105,6 @@ canvas.bind('<Button-1>', mouse_click)
 canvas.bind('<Button-3>', mouse_click)
 if 'main_ball' in globals():
     del main_ball
+balls = create_list_of_balls(6)
 main()
 root.mainloop()
